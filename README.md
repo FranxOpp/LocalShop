@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Local_shop
+=======
+# Local Shop
+>>>>>>> 473a3f24233458b6ca11af335b26d9a3f9c129d2
 
 
 
@@ -15,14 +19,22 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
+<<<<<<< HEAD
 git remote add origin https://gitlab.services.ding.unisannio.it/ingsw24-gruppo14/local_shop.git
+=======
+git remote add origin https://gitlab.services.ding.unisannio.it/ingsw24-gruppo14/local-shop.git
+>>>>>>> 473a3f24233458b6ca11af335b26d9a3f9c129d2
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
+<<<<<<< HEAD
 - [ ] [Set up project integrations](https://gitlab.services.ding.unisannio.it/ingsw24-gruppo14/local_shop/-/settings/integrations)
+=======
+- [ ] [Set up project integrations](https://gitlab.services.ding.unisannio.it/ingsw24-gruppo14/local-shop/-/settings/integrations)
+>>>>>>> 473a3f24233458b6ca11af335b26d9a3f9c129d2
 
 ## Collaborate with your team
 
