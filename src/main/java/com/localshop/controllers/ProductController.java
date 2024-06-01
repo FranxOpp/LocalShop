@@ -37,5 +37,16 @@ public class ProductController {
     public Product createProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
-}
+
+    @GetMapping("/search")
+    public List <Product> searchProducts(@RequestParam String name){
+        return productRepository.findByNameContaining(name);
+    }
+
+    @GetMapping("/filter")
+    public List <Product> filterProducts (@RequestParam Double minPrice,@RequestParam Double maxPrice){
+        return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+ }
 

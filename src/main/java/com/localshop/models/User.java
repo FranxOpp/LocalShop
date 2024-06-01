@@ -1,6 +1,7 @@
 package com.localshop.models;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Classe modello per rappresentare un utente.
@@ -21,6 +22,12 @@ public class User {
 
     @Column(nullable = false)
     private String role;
+
+    @Column(nullable = false,unique = true)
+    private String email;
+
+    private String resetToken;
+    private Date resetTokenExpiryDate;
 
     /**
      * Restituisce l'ID dell'utente.
@@ -59,6 +66,21 @@ public class User {
     }
 
     /**
+     * Restituisce l'email
+     * @return email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Imposta l'email
+     * @param email email da impostare
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    /**
      * Restituisce la password.
      *
      * @return la password
@@ -93,4 +115,32 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+    /**
+     * Imposta il token di reset della password.
+     *
+     * @param resetToken il token di reset della password da impostare
+     */
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    /**
+     * Restituisce la data di scadenza del token di reset della password.
+     *
+     * @return la data di scadenza del token di reset della password
+     */
+    public Date getResetTokenExpiryDate() {
+        return resetTokenExpiryDate;
+    }
+
+    /**
+     * Imposta la data di scadenza del token di reset della password.
+     *
+     * @param resetTokenExpiryDate la data di scadenza del token di reset della password da impostare
+     */
+    public void setResetTokenExpiryDate(Date resetTokenExpiryDate) {
+        this.resetTokenExpiryDate = resetTokenExpiryDate;
+    }
+
+
 }
