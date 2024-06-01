@@ -15,7 +15,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+/**
+ * Filtro per richieste JWT che viene eseguito una volta per ogni richiesta.
+ * Controlla la presenza di un token JWT nell'intestazione della richiesta e, se presente e valido,
+ * imposta l'autenticazione nel contesto di sicurezza di Spring.
+ */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -25,13 +29,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * Filtra le richieste HTTP per l'autenticazione JWT
+     *
+     *
+     * @param request il {@link HttpServletRequest} che viene filtrato
+     * @param response il {@link HttpServletResponse} che viene filtrato
+     * @param chain la {@link FilterChain} per filtrare ulteriori richieste
+     * @throws jakarta.servlet.ServletException in caso di errori nel filtro
+     * @throws IOException in caso di errori di input/output
+     */
+
     @Override
     protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain chain) throws jakarta.servlet.ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwtToken = null;
-
+        // Estrae il token JWT dall'intestazione della richiesta
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
@@ -44,7 +59,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
         }
-
+        // Valida il token e imposta l'autenticazione nel contesto di sicurezza di Spring
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
 
