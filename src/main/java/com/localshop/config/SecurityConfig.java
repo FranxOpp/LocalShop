@@ -16,35 +16,75 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configura la sicurezza per l'applicazione Spring Boot usando Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
+    private UserDetailsService jwtUserDetailsService;
+
+    /**
+     * Configura la catena dei filtri di sicurezza per l'applicazione.
+     *
+     * @param http il contesto di sicurezza HTTP
+     * @return la catena dei filtri di sicurezza configurata
+     * @throws Exception in caso di errori durante la configurazione
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Metodo aggiornato per disabilitare CSRF
+                // Disabilita la protezione CSRF (non necessaria per le API stateless)
+                .csrf(csrf -> csrf.disable())
+                // Configura le autorizzazioni per le richieste HTTP
                 .authorizeHttpRequests(authorize -> authorize
+                        // Permette l'accesso a tutte le richieste che iniziano con "/api/"
                         .requestMatchers("/api/**").permitAll()
+                        // Richiede l'autenticazione per tutte le altre richieste
                         .anyRequest().authenticated()
-                );
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                )
+                // Configura la gestione delle eccezioni di autenticazione
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                // Configura la gestione delle sessioni per essere stateless
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // Aggiunge il filtro JWT prima del filtro di autenticazione standard
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
+    /**
+     * Configura il codificatore delle password usando BCrypt.
+     *
+     * @return l'istanza del codificatore delle password
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configura il gestore delle autenticazioni con il servizio di dettagli utente e il codificatore delle password.
+     *
+     * @param http il contesto di sicurezza HTTP
+     * @return l'istanza del gestore delle autenticazioni
+     * @throws Exception in caso di errori durante la configurazione
+     */
     @Bean
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
+        // Configura il gestore delle autenticazioni con il servizio di dettagli utente e il codificatore delle password
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
         return auth.build();
     }
-
 }
