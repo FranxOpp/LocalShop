@@ -2,6 +2,7 @@ package com.localshop.controllers;
 
 import com.localshop.models.Order;
 import com.localshop.repositories.OrderRepository;
+import com.localshop.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Restituisce la lista di tutti gli ordini.
@@ -74,5 +78,20 @@ public class OrderController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<Order> sendOrder(@RequestBody Order order) {
+        order.setStatus("PROCESSING");
+        Order savedOrder = orderRepository.save(order);
+        sendOrderConfirmationEmail(savedOrder);
+        return ResponseEntity.ok(savedOrder);
+    }
+
+    private void sendOrderConfirmationEmail(Order order){
+        String to = order.getUser().getEmail();
+        String subject = "Order Confirmation";
+        String text = "Hi,"+ order.getUser().getUsername()+"Your Order has been laced successfully.\\nOrder ID: "+ order.getId();
+        emailService.sendEmail(to,subject,text);
     }
 }

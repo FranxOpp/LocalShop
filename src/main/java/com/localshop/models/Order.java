@@ -11,6 +11,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<CartItem> items;
 
@@ -42,4 +46,13 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setUser(User user){
+        this.user = user;
+    }
+
 }
