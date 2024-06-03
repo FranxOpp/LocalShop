@@ -1,8 +1,14 @@
-<<<<<<< HEAD
-# Local_shop
+
+GRUPPO 14: LOCAL SHOP 
 =======
-# Local Shop
->>>>>>> 473a3f24233458b6ca11af335b26d9a3f9c129d2
+
+**Authors**: Francesco Coppola, Rosa Magnapane, Mariarosaria Molinaro, Alessia Pia Oliva
+
+
+Local Shop è una piattaforma online che connette i consumatori con una vasta selezione di negozi locali di moda, situati nei piccoli paesini e centri più piccoli.
+
+L'obiettivo principale è quello di promuovere e sostenere le piccole attività commerciali, offrendo agli utenti l'accesso a una varietà di prodotti provenienti dal territorio. 
+
 
 
 
