@@ -7,6 +7,7 @@ import java.util.Date;
  * Classe modello per rappresentare un utente.
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User {
 

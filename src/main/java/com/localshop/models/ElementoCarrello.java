@@ -2,13 +2,20 @@ package com.localshop.models;
 
 import javax.persistence.*;
 
+/**
+ * Classe modello per rappresentare un elemento nel carrello.
+ */
 @Entity
 @Table(name = "cart_items")
-public class CartItem {
+public class ElementoCarrello {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "carrello_id", nullable = false)
+    private Carrello carrello;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -25,6 +32,14 @@ public class CartItem {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Carrello getCarrello() {
+        return carrello;
+    }
+
+    public void setCarrello(Carrello carrello) {
+        this.carrello = carrello;
     }
 
     public Product getProduct() {

@@ -1,5 +1,7 @@
 package com.localshop.controllers;
 
+import com.localshop.models.Cliente;
+import com.localshop.models.Commerciante;
 import com.localshop.models.User;
 import com.localshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,34 +40,33 @@ public class UserController {
     }
 
     /**
-     * Crea un nuovo utente.
+     * Registra un nuovo cliente.
      *
-     * @param user l'utente da creare
-     * @return l'utente creato
+     * @param cliente il cliente da registrare
+     * @return ResponseEntity che indica il risultato dell'operazione
      */
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    @PostMapping("/register/cliente")
+    public ResponseEntity<?> registerCliente(@RequestBody Cliente cliente) {
+        return registerUser(cliente);
     }
 
     /**
-     * Registra un nuovo utente.
+     * Registra un nuovo commerciante.
      *
-     * @param user l'utente da registrare
+     * @param commerciante il commerciante da registrare
      * @return ResponseEntity che indica il risultato dell'operazione
      */
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        // Verifica se il nome utente esiste già
+    @PostMapping("/register/commerciante")
+    public ResponseEntity<?> registerCommerciante(@RequestBody Commerciante commerciante) {
+        return registerUser(commerciante);
+    }
+
+    private ResponseEntity<?> registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             return ResponseEntity.badRequest().body("Username is already taken!");
         }
 
-        // Codifica la password dell'utente
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Imposta il ruolo predefinito per l'utente
-        user.setRole("ROLE_USER");
-        // Salva l'utente nel repository
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully!");
     }
@@ -123,8 +124,6 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-
-
     }
 
     /**
@@ -140,6 +139,7 @@ public class UserController {
         message.setText("To reset your password, click the link below:\n" + resetUrl);
         mailSender.send(message);
     }
+
     /**
      * Mostra il modulo di reset della password se il token è valido.
      *
