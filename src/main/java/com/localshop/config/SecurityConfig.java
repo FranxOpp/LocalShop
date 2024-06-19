@@ -2,6 +2,7 @@ package com.localshop.config;
 
 import com.localshop.security.JwtAuthenticationEntryPoint;
 import com.localshop.security.JwtRequestFilter;
+import com.localshop.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,7 @@ public class SecurityConfig {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    private UserDetailsService jwtUserDetailsService;
+    private CustomUserDetailsService customUserDetailsService;
 
     /**
      * Configura la catena dei filtri di sicurezza per l'applicazione.
@@ -84,7 +85,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
         // Configura il gestore delle autenticazioni con il servizio di dettagli utente e il codificatore delle password
-        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
         return auth.build();
     }
 }

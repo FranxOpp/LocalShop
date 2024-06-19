@@ -3,6 +3,7 @@ package com.localshop.controllers;
 import com.localshop.models.JwtRequest;
 import com.localshop.models.JwtResponse;
 import com.localshop.security.JwtTokenUtil;
+import com.localshop.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +11,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,7 +28,7 @@ public class JwtAuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserDetailsService jwtUserDetailsService;
+    private CustomUserDetailsService customUserDetailsService;
 
     /**
      * Crea un token di autenticazione JWT per un utente autenticato.
@@ -44,7 +44,7 @@ public class JwtAuthenticationController {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         // Carica i dettagli dell'utente
-        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
         // Genera il token JWT
         final String token = jwtTokenUtil.generateToken(userDetails);

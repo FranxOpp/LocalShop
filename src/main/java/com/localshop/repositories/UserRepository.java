@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+
+
     /**
      * Trova un utente per nome utente.
      *
