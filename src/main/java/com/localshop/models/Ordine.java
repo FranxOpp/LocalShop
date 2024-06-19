@@ -31,6 +31,9 @@ public class Ordine {
     @Column(nullable = false)
     private String status;
 
+    @Column(nullable = false)
+    private String indirizzoSpedizione;
+
     // Getters e Setters
 
     public Long getId() {
@@ -80,4 +83,13 @@ public class Ordine {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getIndirizzoSpedizione() {
+        return indirizzoSpedizione;
+    }
+
+    public void setIndirizzoSpedizione(String indirizzoSpedizione) {
+        this.indirizzoSpedizione = indirizzoSpedizione;
+    }
+
 }

@@ -1,9 +1,9 @@
 package com.localshop.controllers;
 
 import com.localshop.models.Ordine;
-import com.localshop.models.OrdineDettaglio;
 import com.localshop.repositories.OrdineRepository;
 import com.localshop.services.EmailService;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,7 @@ public class OrdineController {
 
     @Autowired
     private EmailService emailService;
+
 
     /**
      * Restituisce la lista di tutti gli ordini.
@@ -46,25 +47,6 @@ public class OrdineController {
         Ordine savedOrdine = ordineRepository.save(ordine);
         sendOrderConfirmationEmail(savedOrdine);
         return savedOrdine;
-    }
-
-    /**
-     * Aggiorna lo stato di un ordine.
-     *
-     * @param id l'ID dell'ordine da aggiornare
-     * @param status il nuovo stato dell'ordine
-     * @return l'ordine aggiornato
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Ordine> updateOrderStatus(@PathVariable Long id, @RequestBody String status) {
-        Optional<Ordine> optionalOrdine = ordineRepository.findById(id);
-        if (optionalOrdine.isPresent()) {
-            Ordine ordine = optionalOrdine.get();
-            ordine.setStatus(status);
-            return ResponseEntity.ok(ordineRepository.save(ordine));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     /**
@@ -98,6 +80,19 @@ public class OrdineController {
         return ResponseEntity.ok(savedOrdine);
     }
 
+
+    /**
+     * Recupera un ordine per ID.
+     * Permetterà al front-end di recuperare tutte le informazioni di un ordine specifico
+     * @param id l'ID dell'ordine da recuperare
+     * @return l'ordine recuperato
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Ordine> getOrdineById (@PathVariable Long id) {
+        Optional<Ordine>ordine = ordineRepository.findById(id);
+        return ordine.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+    }
+
     private void sendOrderConfirmationEmail(Ordine ordine) {
         String to = ordine.getCliente().getEmail();
         String subject = "Order Confirmation";
@@ -105,4 +100,3 @@ public class OrdineController {
         emailService.sendEmail(to, subject, text);
     }
 }
-
