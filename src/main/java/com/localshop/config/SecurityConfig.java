@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Permette l'accesso a tutte le richieste che iniziano con "/api/"
                         .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/api/commerciante/**").hasRole("COMMERCIANTE")
+                        .requestMatchers("/api/cliente/**").hasRole("CLIENTE")
                         // Richiede l'autenticazione per tutte le altre richieste
                         .anyRequest().authenticated()
                 )

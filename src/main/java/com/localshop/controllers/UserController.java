@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ public class UserController {
      * @return lista di tutti gli utenti
      */
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')") // Solo l'admin può visualizzare tutti gli utenti
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -47,6 +49,7 @@ public class UserController {
      */
     @PostMapping("/register/cliente")
     public ResponseEntity<?> registerCliente(@RequestBody Cliente cliente) {
+        cliente.setRole("ROLE_CLIENTE");
         return registerUser(cliente);
     }
 
@@ -58,9 +61,16 @@ public class UserController {
      */
     @PostMapping("/register/commerciante")
     public ResponseEntity<?> registerCommerciante(@RequestBody Commerciante commerciante) {
+        commerciante.setRole("ROLE_COMMERCIANTE");
         return registerUser(commerciante);
     }
 
+    /**
+     * Metodo privato per registrare un utente (cliente o commerciante).
+     *
+     * @param user l'utente da registrare
+     * @return ResponseEntity che indica il risultato dell'operazione
+     */
     private ResponseEntity<?> registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             return ResponseEntity.badRequest().body("Username is already taken!");
@@ -79,6 +89,7 @@ public class UserController {
      * @return ResponseEntity contenente l'utente aggiornato
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id") // Admin o l'utente stesso possono aggiornare i dati
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -87,13 +98,23 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
             user.setRole(userDetails.getRole());
             user.setEmail(userDetails.getEmail());
+            user.setFirstName(userDetails.getFirstName());
+            user.setLastName(userDetails.getLastName());
+            user.setDateOfBirth(userDetails.getDateOfBirth());
             return ResponseEntity.ok(userRepository.save(user));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
+    /**
+     * Elimina un utente esistente.
+     *
+     * @param id l'ID dell'utente da eliminare
+     * @return ResponseEntity che indica il risultato dell'operazione
+     */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id") // Admin o l'utente stesso possono eliminare l'account
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -104,6 +125,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Richiede il reset della password per un utente.
+     *
+     * @param payload un Map contenente il nome utente
+     * @return ResponseEntity che indica il risultato dell'operazione
+     */
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
