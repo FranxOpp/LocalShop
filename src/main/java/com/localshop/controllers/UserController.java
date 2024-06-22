@@ -4,6 +4,8 @@ import com.localshop.models.Cliente;
 import com.localshop.models.Commerciante;
 import com.localshop.models.User;
 import com.localshop.repositories.UserRepository;
+import com.localshop.repositories.ClienteRepository;
+import com.localshop.repositories.CommercianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,6 +25,12 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private CommercianteRepository commercianteRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,8 +57,20 @@ public class UserController {
      */
     @PostMapping("/register/cliente")
     public ResponseEntity<?> registerCliente(@RequestBody Cliente cliente) {
+        if (userRepository.existsByUsername(cliente.getUsername())) {
+            return ResponseEntity.badRequest().body("Username is already taken!");
+        }
+
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
         cliente.setRole("ROLE_CLIENTE");
-        return registerUser(cliente);
+        User savedUser = userRepository.save(cliente);
+
+        Cliente savedCliente = new Cliente();
+        savedCliente.setCodiceFiscale(cliente.getCodiceFiscale());
+        savedCliente.setUser(savedUser);
+        clienteRepository.save(savedCliente);
+
+        return ResponseEntity.ok("Cliente registered successfully!");
     }
 
     /**
@@ -61,24 +81,20 @@ public class UserController {
      */
     @PostMapping("/register/commerciante")
     public ResponseEntity<?> registerCommerciante(@RequestBody Commerciante commerciante) {
-        commerciante.setRole("ROLE_COMMERCIANTE");
-        return registerUser(commerciante);
-    }
-
-    /**
-     * Metodo privato per registrare un utente (cliente o commerciante).
-     *
-     * @param user l'utente da registrare
-     * @return ResponseEntity che indica il risultato dell'operazione
-     */
-    private ResponseEntity<?> registerUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsername(commerciante.getUsername())) {
             return ResponseEntity.badRequest().body("Username is already taken!");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully!");
+        commerciante.setPassword(passwordEncoder.encode(commerciante.getPassword()));
+        commerciante.setRole("ROLE_COMMERCIANTE");
+        User savedUser = userRepository.save(commerciante);
+
+        Commerciante savedCommerciante = new Commerciante();
+        savedCommerciante.setPartitaIva(commerciante.getPartitaIva());
+        savedCommerciante.setUser(savedUser);
+        commercianteRepository.save(savedCommerciante);
+
+        return ResponseEntity.ok("Commerciante registered successfully!");
     }
 
     /**
