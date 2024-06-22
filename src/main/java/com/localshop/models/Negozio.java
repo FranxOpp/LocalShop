@@ -11,9 +11,8 @@ import java.util.List;
 public class Negozio {
 
     @Id
-    @Column(name = "piva", nullable = false, unique = true)
-    private String piva;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(nullable = false)
     private String nome;
 
@@ -35,12 +34,12 @@ public class Negozio {
 
     // Getters e Setters
 
-    public String getPiva() {
-        return piva;
+    public Long getId() {
+        return id;
     }
 
-    public void setPiva(String piva) {
-        this.piva = piva;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
