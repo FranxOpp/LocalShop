@@ -18,7 +18,7 @@ public class Commerciante extends User{
     @OneToMany(mappedBy = "commerciante", cascade = CascadeType.ALL)
     private List<Negozio> negozi;
 
-    // Getters and Setters...
+    // Getters and Setters
 
     public String getPartitaIva() {
         return partitaIva;

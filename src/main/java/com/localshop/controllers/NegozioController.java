@@ -3,7 +3,7 @@ package com.localshop.controllers;
 import com.localshop.models.Negozio;
 import com.localshop.models.Commerciante;
 import com.localshop.repositories.NegozioRepository;
-import com.localshop.repositories.UserRepository;
+import com.localshop.repositories.CommercianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class NegozioController {
     private NegozioRepository negozioRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private CommercianteRepository commercianteRepository;
 
     /**
      * Restituisce la lista di tutti i negozi.
@@ -38,12 +38,12 @@ public class NegozioController {
      * Crea un nuovo negozio.
      *
      * @param negozio il negozio da creare
-     * @param commercianteId l'ID del commerciante che possiede il negozio
+     * @param partitaIva la partita IVA del commerciante che possiede il negozio
      * @return il negozio creato
      */
     @PostMapping
-    public ResponseEntity<?> createNegozio(@RequestBody Negozio negozio, @RequestParam Long commercianteId) {
-        Optional<Commerciante> optionalCommerciante = userRepository.findById(commercianteId).map(user -> (Commerciante) user);
+    public ResponseEntity<?> createNegozio(@RequestBody Negozio negozio, @RequestParam String partitaIva) {
+        Optional<Commerciante> optionalCommerciante = commercianteRepository.findById(partitaIva);
         if (optionalCommerciante.isPresent()) {
             Commerciante commerciante = optionalCommerciante.get();
             negozio.setCommerciante(commerciante);
@@ -57,13 +57,13 @@ public class NegozioController {
     /**
      * Aggiorna un negozio esistente.
      *
-     * @param piva la P.IVA del negozio da aggiornare
+     * @param id l'ID del negozio da aggiornare
      * @param negozioDetails i dettagli aggiornati del negozio
      * @return il negozio aggiornato
      */
-    @PutMapping("/{piva}")
-    public ResponseEntity<Negozio> updateNegozio(@PathVariable String piva, @RequestBody Negozio negozioDetails) {
-        Optional<Negozio> optionalNegozio = negozioRepository.findById(piva);
+    @PutMapping("/{id}")
+    public ResponseEntity<Negozio> updateNegozio(@PathVariable Long id, @RequestBody Negozio negozioDetails) {
+        Optional<Negozio> optionalNegozio = negozioRepository.findById(id);
         if (optionalNegozio.isPresent()) {
             Negozio negozio = optionalNegozio.get();
             negozio.setNome(negozioDetails.getNome());
@@ -80,12 +80,12 @@ public class NegozioController {
     /**
      * Elimina un negozio.
      *
-     * @param piva la P.IVA del negozio da eliminare
+     * @param id l'ID del negozio da eliminare
      * @return ResponseEntity vuoto
      */
-    @DeleteMapping("/{piva}")
-    public ResponseEntity<Void> deleteNegozio(@PathVariable String piva) {
-        Optional<Negozio> optionalNegozio = negozioRepository.findById(piva);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNegozio(@PathVariable Long id) {
+        Optional<Negozio> optionalNegozio = negozioRepository.findById(id);
         if (optionalNegozio.isPresent()) {
             negozioRepository.delete(optionalNegozio.get());
             return ResponseEntity.noContent().build();

@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/products/public").permitAll()
                         .requestMatchers("/api/commerciante/**").hasRole("COMMERCIANTE")
                         .requestMatchers("/api/cliente/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/recensioni/**").hasRole("CLIENTE")
                         // Richiede l'autenticazione per tutte le altre richieste
                         .anyRequest().authenticated()
                 )
