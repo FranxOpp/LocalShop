@@ -21,12 +21,13 @@ public class ProductController {
 
     /**
      * Restituisce la lista di tutti i prodotti.
-     *
+     * Permette di vedere anche a chi non è registrato o loggato tutti i prodotti presenti sul sito web
      * @return lista di tutti i prodotti
      */
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    @GetMapping("/public")
+    public ResponseEntity<List<Product>>getAllProducts() {
+        List <Product> products = productRepository.findAll();
+        return ResponseEntity.ok(products);
     }
 
     /**
