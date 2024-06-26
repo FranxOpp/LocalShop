@@ -1,13 +1,13 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 /**
  * Classe modello per rappresentare un carrello.
  */
 @Entity
-@Table(name = "carts")
+@Table(name = "Carrello")
 public class Carrello {
 
     @Id
@@ -19,6 +19,10 @@ public class Carrello {
 
     @OneToOne(mappedBy = "carrello")
     private Ordine ordine;
+
+    @ManyToOne
+    @JoinColumn(name="cliente_id", nullable = false)
+    private Cliente cliente;
 
     // Getters e Setters
 
@@ -45,4 +49,13 @@ public class Carrello {
     public void setOrdine(Ordine ordine) {
         this.ordine = ordine;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
 }

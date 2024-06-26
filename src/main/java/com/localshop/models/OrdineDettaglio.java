@@ -1,12 +1,12 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Classe modello per rappresentare i dettagli di un ordine.
  */
 @Entity
-@Table(name = "order_details")
+@Table(name = "OrdineDettaglio")
 public class OrdineDettaglio {
 
     @Id
@@ -22,7 +22,7 @@ public class OrdineDettaglio {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "negozio_piva", nullable = false)
+    @JoinColumn(name = "negozio_id", nullable = false)
     private Negozio negozio;
 
     @Column(nullable = false)

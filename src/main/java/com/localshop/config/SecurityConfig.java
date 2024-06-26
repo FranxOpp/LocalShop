@@ -47,6 +47,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // Configura le autorizzazioni per le richieste HTTP
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/register", "/api/users/register/**").permitAll()
                         //Permette l'accesso pubblico all'endpoint per i prodotti
                         .requestMatchers("/api/products/public").permitAll()
                         .requestMatchers("/api/commerciante/**").hasRole("COMMERCIANTE")

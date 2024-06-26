@@ -1,20 +1,14 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cliente")
+@Table(name = "Cliente")
 public class Cliente extends User{
 
     @Id
     @Column(name = "codice_fiscale", nullable = false, unique = true)
     private String codiceFiscale;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    // Getters and Setters...
 
     public String getCodiceFiscale() {
         return codiceFiscale;
@@ -24,11 +18,4 @@ public class Cliente extends User{
         this.codiceFiscale = codiceFiscale;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

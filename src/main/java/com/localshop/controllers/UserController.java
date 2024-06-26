@@ -63,12 +63,7 @@ public class UserController {
 
         cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
         cliente.setRole("ROLE_CLIENTE");
-        User savedUser = userRepository.save(cliente);
-
-        Cliente savedCliente = new Cliente();
-        savedCliente.setCodiceFiscale(cliente.getCodiceFiscale());
-        savedCliente.setUser(savedUser);
-        clienteRepository.save(savedCliente);
+        clienteRepository.save(cliente);
 
         return ResponseEntity.ok("Cliente registered successfully!");
     }
@@ -87,12 +82,7 @@ public class UserController {
 
         commerciante.setPassword(passwordEncoder.encode(commerciante.getPassword()));
         commerciante.setRole("ROLE_COMMERCIANTE");
-        User savedUser = userRepository.save(commerciante);
-
-        Commerciante savedCommerciante = new Commerciante();
-        savedCommerciante.setPartitaIva(commerciante.getPartitaIva());
-        savedCommerciante.setUser(savedUser);
-        commercianteRepository.save(savedCommerciante);
+        commercianteRepository.save(commerciante);
 
         return ResponseEntity.ok("Commerciante registered successfully!");
     }

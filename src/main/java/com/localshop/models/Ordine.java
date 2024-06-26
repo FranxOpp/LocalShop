@@ -1,13 +1,13 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 /**
  * Classe modello per rappresentare un ordine.
  */
 @Entity
-@Table(name = "orders")
+@Table(name = "Ordine")
 public class Ordine {
 
     @Id

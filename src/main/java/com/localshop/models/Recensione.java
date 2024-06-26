@@ -1,6 +1,6 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -10,7 +10,7 @@ import java.util.Date;
  * Classe modello per rappresentare una recensione.
  */
 @Entity
-@Table(name = "recensioni")
+@Table(name = "Recensioni")
 public class Recensione {
 
     @Id

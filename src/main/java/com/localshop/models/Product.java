@@ -1,12 +1,12 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Classe modello per rappresentare un prodotto.
  */
 @Entity
-@Table(name = "products")
+@Table(name = "Product")
 public class Product {
 
     @Id
@@ -21,6 +21,10 @@ public class Product {
 
     @Column(nullable = false)
     private double price;
+
+    @ManyToOne
+    @JoinColumn(name = "negozio_id",nullable = false)
+    private Negozio negozio;
 
     /**
      * Restituisce l'ID del prodotto.
@@ -93,4 +97,25 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    /**
+     * Restituisce il negozio associato al prodotto.
+     *
+     * @return il negozio associato al prodotto
+     */
+    public Negozio getNegozio() {
+        return negozio;
+    }
+
+    /**
+     * Imposta il negozio associato al prodotto.
+     *
+     * @param negozio il negozio da impostare
+     */
+    public void setNegozio(Negozio negozio) {
+        this.negozio = negozio;
+    }
+
+
+
 }

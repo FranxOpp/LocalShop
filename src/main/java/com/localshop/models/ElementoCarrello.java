@@ -1,12 +1,12 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Classe modello per rappresentare un elemento nel carrello.
  */
 @Entity
-@Table(name = "cart_items")
+@Table(name = "ElementoCarrello")
 public class ElementoCarrello {
 
     @Id

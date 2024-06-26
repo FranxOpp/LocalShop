@@ -1,6 +1,6 @@
 package com.localshop.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 /**
@@ -8,7 +8,7 @@ import java.util.Date;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "users")
+@Table(name = "User")
 public class User {
 
     @Id

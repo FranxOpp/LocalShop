@@ -3,7 +3,7 @@ package com.localshop.controllers;
 import com.localshop.models.Ordine;
 import com.localshop.repositories.OrdineRepository;
 import com.localshop.services.EmailService;
-import org.aspectj.weaver.ast.Or;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
